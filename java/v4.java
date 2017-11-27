@@ -27,7 +27,7 @@ class MaxSubArray{
 		end = bean.getCurrentThreadCpuTime();
 		if(args.length > 2){
 			if(args[2].equals("-t")){
-				System.out.println((end - start)/1000000000.0);
+				System.out.printf("%f\n",(end - start)/1000000000.0);
 			}
 			else if(args[2].equals("-r")){
 				System.out.println(result);
