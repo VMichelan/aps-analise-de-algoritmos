@@ -23,7 +23,7 @@ class MaxSubArray{
 		MaxSubArray a = new MaxSubArray();
 		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
 		long start = bean.getCurrentThreadCpuTime(),end;
-		result = a.max_subarray(v,0,size-1);
+		result = a.maxSubArraySum(v,0,size-1);
 		end = bean.getCurrentThreadCpuTime();
 		if(args.length > 2){
 			if(args[2].equals("-t")){
@@ -35,33 +35,32 @@ class MaxSubArray{
 		}
 	}
 
-	public int max_subarray(List<Integer> v, int lo,int hi){
-		if (lo >= hi)
-			return v.get(lo);
-		int mid = (lo+hi)/2;
-		int leftMax = max_subarray(v,lo,mid);
-		int rightMax = max_subarray(v,mid+1,hi);
-		int leftBothMax = Integer.MIN_VALUE,leftBothSum = 0;
-		for(int i = mid; i >= 0;i--){
-			leftBothSum += v.get(i);
-			if (leftBothSum > leftBothMax)
-				leftBothMax = leftBothSum;
-		}
-		int rightBothMax = Integer.MIN_VALUE,rightBothSum = 0;
-		for(int i = mid+1; i <= hi;i++){
-			rightBothSum += v.get(i);
-			if (rightBothSum > rightBothMax)
-				rightBothMax = rightBothSum;
-		}
+	public int maxCrossingSum(List<Integer> arr, int l, int m, int h){
+	    int sum = 0;
+	    int left_sum = Integer.MIN_VALUE;
+	    for (int i = m; i >= l; i--){
+	        sum = sum + arr.get(i);
+	        if (sum > left_sum)
+	          left_sum = sum;
+	    }
+	 
+	    sum = 0;
+	    int right_sum = Integer.MIN_VALUE;
+	    for (int i = m+1; i <= h; i++){
+	        sum = sum + arr.get(i);
+	        if (sum > right_sum)
+	          right_sum = sum;
+	    }
+	    return left_sum + right_sum;
+	}
 
-		int bothMax = leftBothMax + rightBothMax;
-
-		if(bothMax > leftMax && bothMax > rightMax)
-			return bothMax;
-		else if (leftMax > bothMax && leftMax > rightMax)
-			return leftMax;
-		else
-			return rightMax;
+	int maxSubArraySum(List<Integer> arr, int l, int h){
+	   if (l == h)
+	     return arr.get(l);
+	   int m = (l + h)/2;
+	   return Math.max(Math.max(maxSubArraySum(arr, l, m),
+	              maxSubArraySum(arr, m+1, h)),
+	              maxCrossingSum(arr, l, m, h));
 	}
 
 }
